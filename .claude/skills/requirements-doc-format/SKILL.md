@@ -1,6 +1,6 @@
 ---
 name: requirements-doc-format
-description: Canonical structure for top-level docs/ files capturing business requirements. Use when writing or verifying docs/ — covers file organization, required sections, requirement IDs, and deprecation rules.
+description: Canonical structure for top-level docs/ files capturing business requirements. Use when writing or verifying docs/ — covers file organization, the required index.md table of contents at every level, required sections, requirement IDs, and deprecation rules.
 ---
 
 # Requirements doc format
@@ -19,6 +19,23 @@ description: Canonical structure for top-level docs/ files capturing business re
 | `docs/<other>/`       | New categories get their own dedicated subdirectory    |
 
 Never put requirements outside `docs/product-spec/`. Never mix architecture or how-it-works content into product-spec.
+
+## `index.md` is required at every level
+
+Every directory under `docs/` — including `docs/` itself — must contain an `index.md` that serves as the table of contents for that directory. This is how readers (and Claude) navigate the docs.
+
+- `docs/index.md` lists each subdirectory with a one-line description and a link to that subdirectory's `index.md`.
+- `docs/<subdir>/index.md` lists every file in that subdirectory (and any nested subdirectories) with a one-line description and a link.
+- When you add, rename, remove, or deprecate a file, update the relevant `index.md` in the **same** change. A doc that isn't in its `index.md` doesn't exist as far as readers are concerned.
+- `index.md` is an index, not a doc. No requirements, no narrative — just the TOC. Keep each entry to one line.
+
+Format for an entry:
+
+```markdown
+- [<title>](<relative-path>) — <one-line description>
+```
+
+For `docs/product-spec/index.md`, the title should be the area name and the description should match the file's `## Purpose` paragraph in one line. Mark deprecated/removed files with `[DEPRECATED]` or `[REMOVED]` in the entry, matching the requirement-ID convention below.
 
 ## File organization within `docs/product-spec/`
 
