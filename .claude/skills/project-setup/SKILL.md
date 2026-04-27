@@ -15,7 +15,8 @@ Use this skill when bootstrapping a new project. The goal is a repo that a new d
 
 3. **Invoke the relevant language preferred-stack skill.** Each language has its own sibling skill that encodes the opinionated tooling defaults so you don't have to relitigate "ruff vs flake8" each time. Invoke the matching skill and follow its conventions:
    - Python → `python-prefer-stack`
-   - Other languages aren't covered yet. If the user is starting a non-Python project, pick the most boring, widely-used tools in that ecosystem, note in the README why they were chosen, and consider creating a new `<lang>-prefer-stack` skill under `.claude/skills/languages/<lang>/` so the next project benefits.
+   - Go → `golang-prefer-stack`
+   - Other languages aren't covered yet. If the user is starting a project in an uncovered language, pick the most boring, widely-used tools in that ecosystem, note in the README why they were chosen, and consider creating a new `<lang>-prefer-stack` skill under `.claude/skills/languages/<lang>/` so the next project benefits.
 
 4. **Scaffold in this order.** Each step builds on the previous, and stopping partway still leaves a working repo:
    1. Hello-world entry point that actually runs (`make run` should print something).
