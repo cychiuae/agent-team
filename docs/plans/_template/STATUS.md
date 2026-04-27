@@ -7,10 +7,16 @@ Last updated: <YYYY-MM-DD HH:MM>
 Phases: explore | docs | plan | implementation | verify | review | done
 
 ## Tasks
-| ID     | Title | State   | Red | Green | Committed (SHA) | Notes |
-|--------|-------|---------|-----|-------|-----------------|-------|
+| ID     | Title | State   | Committed (SHA) | Notes |
+|--------|-------|---------|-----------------|-------|
 
-State values: pending | red | green | committed | done
+State values: pending | in-progress | committed
+
+## Phase 4 test pass
+| Step           | State   | Notes |
+|----------------|---------|-------|
+| tests-written  | pending |       |
+| verifier       | pending |       |
 
 ## Verification loops
 | Attempt | Result | Gap report                  | Amendment tasks |

@@ -6,12 +6,13 @@ One paragraph: what & why. This task is exactly one git commit.
 ## Requirements
 - R-<area>-<n>
 
-## Test cases satisfied
+## Test cases addressed
 - TC-<i>
+(Traceability only — TCs are exercised by tests written in Phase 4. This task does not write or run tests.)
 
 ## Files
 - path/to/source.ext  (new | modify | delete)
-- path/to/test.ext    (new | modify)
+(Production-code paths only. No test paths.)
 
 ## API surface
 Concrete signatures of new or changed functions, classes, endpoints, types.

@@ -19,6 +19,24 @@ description: Given/When/Then template, naming, traceability, and coverage rules 
 - **Notes**: <optional — fixture data shape, env constraints>
 ```
 
+## Scope: business logic only
+
+Behavioral test cases exist to pin down **business logic** — decisions the code makes that the product cares about. Write TCs for:
+
+- Branching / conditional rules ("if X then Y else Z").
+- Validation, authorization, and error semantics.
+- Calculations, transformations, and state transitions.
+- Domain invariants and security-relevant behavior.
+
+Do NOT write TCs for things with no business decision in them:
+
+- Framework / library behavior (e.g. "the ORM persists rows", "the HTTP server returns 404 for unknown routes").
+- Pure configuration, DI wiring, env loading, module registration.
+- Trivial scaffolding: getters/setters, DTO field passthrough, no-logic adapters.
+- Build / infra concerns ("uses Postgres", "deployed to ECS").
+
+If a `docs/product-spec/` requirement is non-business-logic, list it in the plan's **Out of scope (no behavioral test)** section with a one-line reason. The spec-verifier treats those as covered, not as gaps. Inventing a TC just to satisfy a coverage matrix is over-reach.
+
 ## Rules
 
 - **Stable IDs**: `TC-1`, `TC-2`, … Never renumber. New cases append.

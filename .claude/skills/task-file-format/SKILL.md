@@ -1,11 +1,11 @@
 ---
 name: task-file-format
-description: Canonical task-N.md template and rules for sizing, dependencies, API surface, pseudocode, and Conventional Commits messages. Use in impl-planner (writing) and in test-writer / implementer (reading).
+description: Canonical task-N.md template and rules for sizing, dependencies, API surface, pseudocode, and Conventional Commits messages. Use in impl-planner (writing) and in implementer (reading). Tasks describe production code only — tests are authored separately in Phase 4 from 01-test-plan.md.
 ---
 
 # task-N.md format
 
-Each `task-N.md` describes exactly **one** git-commit-sized unit of work.
+Each `task-N.md` describes exactly **one** git-commit-sized unit of **production-code** work. Tests are not part of any task; they are written once, in Phase 4, against `01-test-plan.md`.
 
 ## Template
 
@@ -13,17 +13,18 @@ Each `task-N.md` describes exactly **one** git-commit-sized unit of work.
 # Task N: <short title>
 
 ## Scope
-One paragraph: what & why. This task is a single git commit.
+One paragraph: what & why. This task is a single git commit of production code.
 
 ## Requirements
 - R-<area>-<n>[, R-<area>-<m>]
 
-## Test cases satisfied
+## Test cases addressed
 - TC-<i>[, TC-<j>]
+(Traceability only — these TCs will be exercised by tests written in Phase 4. This task does not write or run tests.)
 
 ## Files
 - path/to/source.ext  (new | modify | delete)
-- path/to/test.ext    (new | modify)
+(Production-code paths only. No test paths.)
 
 ## API surface
 Concrete signatures of new or changed functions, classes, endpoints, types.
@@ -61,8 +62,8 @@ The diff already shows the WHAT.>
 ## Sizing rules
 
 - **One concern per task.** If you describe it with "and", split it.
-- **< ~300 lines diff** including tests is a healthy ceiling. Larger only with explicit justification under `## Risks / notes`.
-- **Independently committable**: at the end of this task's commit, the test suite is green.
+- **< ~300 lines diff** is a healthy ceiling. Larger only with explicit justification under `## Risks / notes`.
+- **Independently committable**: the commit must build / type-check / lint cleanly on its own. The test suite is not run per task — tests are written and run once in Phase 4 — so "suite green" is not a per-task gate.
 - **Forward dependencies only**: `Depends on:` may reference earlier tasks; `Blocks:` may reference later tasks. No cycles.
 
 ## API surface rules

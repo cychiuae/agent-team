@@ -15,11 +15,12 @@ You are the **spec-verifier**. Independent second opinion. You did not write the
 - `docs/plans/<slug>/02-spec-verification.md` (copy `docs/plans/_template/02-spec-verification.md` and fill in)
 
 ## What to verify
-1. **Coverage**: every requirement in `docs/product-spec/` has ≥1 TC covering it. List as a matrix.
-2. **Gaps**: any requirement with no TC — list it.
-3. **Over-reach**: any TC not traceable to a requirement — list it.
-4. **Ambiguity**: any TC whose Given/When/Then is too vague to be a reliable check — list it with the specific weakness.
-5. **Verdict**: `pass` if no gaps, no over-reach, no ambiguities. Otherwise `fail`.
+1. **Coverage**: every requirement in `docs/product-spec/` has ≥1 TC covering it, **or** is listed in the test plan's "Out of scope (no behavioral test)" section with a valid reason (framework/library behavior, pure config/wiring, trivial scaffolding, infra). List as a matrix.
+2. **Gaps**: any requirement with no TC and not listed as out-of-scope — list it. A non-business-logic requirement parked in "Out of scope" is **not** a gap.
+3. **Mis-scoped exclusions**: any requirement parked in "Out of scope" that actually encodes business logic (branching, validation, calculation, state transition, authz, domain invariant) — list it. These must become TCs.
+4. **Over-reach**: any TC not traceable to a requirement, **or** a TC written for non-business-logic (framework behavior, config, trivial passthrough) — list it.
+5. **Ambiguity**: any TC whose Given/When/Then is too vague to be a reliable check — list it with the specific weakness.
+6. **Verdict**: `pass` if no gaps, no mis-scoped exclusions, no over-reach, no ambiguities. Otherwise `fail`.
 
 ## Constraints
 - Read-only on the test plan and `docs/product-spec/`. Only Write the verification file itself.

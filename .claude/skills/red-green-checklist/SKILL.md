@@ -1,49 +1,46 @@
 ---
 name: red-green-checklist
-description: Discipline gates for the Red and Green phases of TDD. Use in test-writer (Red) and implementer (Green) to confirm the discipline is intact before declaring a phase done.
+description: Discipline rules for the implementer (Phase 3, code-only) and test-writer (Phase 4, single test pass). The /ship flow no longer runs per-task TDD — tests are planned in Phase 2, implementation tasks land in Phase 3 without tests, and tests are written and run once in Phase 4. Use this skill to confirm those boundaries are respected.
 ---
 
-# Red-Green checklist
+# Implementer / test-writer discipline checklist
 
-Strict TDD: a test must fail for the right reason before any production code is written, and production code may only be written to make the failing test pass.
+The /ship flow does **not** practice per-task red-green TDD. Tests for the feature are planned in `01-test-plan.md` (Phase 2), implementation tasks are committed without tests (Phase 3), and tests are written and run once after all tasks are done (Phase 4).
 
-## Red phase (test-writer)
+This skill captures the discipline gates each role must respect.
 
-Before declaring red:
+## Phase 3 — implementer (code only)
 
-- [ ] Test file exists at the path the task specifies.
-- [ ] Test file is in a test directory the project's test runner picks up.
-- [ ] The test runs (no syntax error, no missing import, no unresolved fixture).
-- [ ] The test fails.
-- [ ] The failure reason is **missing production behavior**, not:
-  - typo / syntax error
-  - wrong import path
-  - missing fixture
-  - test asserting against itself
-- [ ] The failure message would help a future debugger see what behavior is missing.
-- [ ] No production code was modified to make the test "fail correctly."
-- [ ] No existing tests now fail or are skipped.
+Before declaring a task done:
 
-If a test passes immediately on first run: stop. Either the test is wrong (it tests existing behavior) or the feature already exists. Report rather than "fix" the test to fail.
+- [ ] All production code is within the task's `## Files` and `## API surface` — no scope creep.
+- [ ] No test files were created or modified.
+- [ ] The test suite was **not** run for this task (per-task test runs are deliberately not part of the workflow).
+- [ ] The commit builds / type-checks / lints cleanly on its own.
+- [ ] Only files in the task's `## Files` were staged. No `git add -A` / `git add .`.
+- [ ] The commit message is the verbatim message from the task's `## Commit message` section.
+- [ ] No `--amend`, `--no-verify`, `--no-gpg-sign`, no force-push.
 
-## Green phase (implementer)
+## Phase 4 — test-writer (single pass)
 
-Before declaring green:
+Before declaring tests written:
 
-- [ ] All tests for this task pass.
-- [ ] Full test suite passes (no regressions in unrelated areas).
-- [ ] No test was modified to make it pass. If a test seemed wrong, you stopped and reported instead.
-- [ ] No test was skipped, xfailed, or disabled.
-- [ ] Implementation is within the task's `## Files` and `## API surface` — no scope creep.
-- [ ] No new tests were added (those belong to the next task or to test-writer).
-- [ ] Code committed only after green confirmed.
+- [ ] Every in-scope TC in `01-test-plan.md` has a corresponding test, and each test traces to its TC-# (test name, docstring, or comment).
+- [ ] Tests exercise observable behavior, not internals.
+- [ ] Every test executes (no syntax / import / missing-fixture errors). Whether each one *passes* is for the verifier to determine — not a gate here.
+- [ ] No production code was modified, even if a test reveals what looks like a bug. Such findings are reported to the orchestrator instead.
+- [ ] No tests were skipped, xfailed, or otherwise disabled.
+- [ ] No assertions were weakened to make a test pass.
+- [ ] Only test files were staged. No `git add -A` / `git add .`.
+- [ ] One commit was made containing only the test files, with a `test:` Conventional Commits subject.
 
-## Hard prohibitions (both phases)
+## Hard prohibitions (both roles)
 
 - Never `pytest.skip` / `xfail` / `it.skip` / equivalent to dodge a failing test.
 - Never delete a test to "fix" it.
 - Never add `if TESTING: return` shortcuts in production code.
-- Never weaken an assertion to make a test pass — go fix the production code or report the test as wrong.
+- Never weaken an assertion to make a test pass — fix the production code via an amendment task, or report the test as wrong.
+- The implementer never writes tests; the test-writer never writes production code.
 
 ## Flaky tests
 
