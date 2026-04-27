@@ -35,6 +35,8 @@ Copy the following from the cloned repo into the root of the user's current proj
 
 Do **not** copy anything else (no `README.md`, no `INSTALL.md`, no `.git`, no other files).
 
+**Do not touch the user's existing `README.md`.** Never create, overwrite, modify, or merge into it. If the user's project does not have a `README.md`, do not create one.
+
 ### 3. Conflict resolution
 
 For **each** file you are about to write, check whether a file already exists at the destination path.
