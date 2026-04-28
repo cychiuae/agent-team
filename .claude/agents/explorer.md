@@ -38,6 +38,6 @@ List anything where two reasonable engineers would make different choices. Err t
 Reference `requirements-doc-format` to understand the structure of `docs/product-spec/` so your "Current state" section is accurate.
 
 ## Return to orchestrator
-- The slug
-- Path to `00-exploration.md`
-- Numbered ambiguity list (verbatim)
+- The slug.
+- Path to `00-exploration.md`.
+- Numbered ambiguity list (verbatim).

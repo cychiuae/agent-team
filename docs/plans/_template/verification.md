@@ -18,7 +18,7 @@ Requirements with no passing evidence in this run.
 - …
 
 ### Dead test cases
-TCs in `01-test-plan.md` with no corresponding actual test.
+TC-#s referenced in trace blocks that point at no actual requirement, or duplicates.
 
 - …
 

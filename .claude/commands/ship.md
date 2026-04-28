@@ -32,44 +32,43 @@ If `docs/plans/<slug>/STATUS.md` already exists for this feature, ask `explorer`
    - Investigate the codebase, identify change sites, list ambiguities.
    - Create `docs/plans/<slug>/`, copy templates from `docs/plans/_template/`, and write `00-exploration.md` and initial `STATUS.md`.
 2. Present the slug + numbered ambiguities to the human. **CHECKPOINT 1**: wait for resolution. Update STATUS.
-3. Delegate to `docs-writer` with the resolved answers → updates `docs/product-spec/`. **CHECKPOINT 2**: human confirms `docs/product-spec/` accurately reflects requirements. Update STATUS.
+3. Delegate to `docs-writer` with the resolved answers. It updates `docs/product-spec/` **and** writes `docs/plans/<slug>/00-change-summary.md` in the same run. **CHECKPOINT 2**: human confirms `docs/product-spec/` + the change summary accurately reflect the requested change. Update STATUS.
 
-### Phase 2 — Plan
+### Phase 2 — Plan tasks
 
-Tests are planned once here, after the spec is confirmed — never per task.
+1. Delegate to `impl-planner` → writes `task-1.md` … `task-N.md` based on the spec, the change summary, and the codebase. (No standalone test plan exists; the test files written in Phase 3 are the test contract.) Update the task table in STATUS.
 
-1. Delegate to `test-planner` → writes `01-test-plan.md` covering every behavioral TC for the spec.
-2. Delegate to `spec-verifier` (independent) → writes `02-spec-verification.md`. If verdict = fail, loop back to step 1 (or to `docs-writer` if `docs/product-spec/` is the gap). Do not proceed on a fail verdict.
-3. Delegate to `impl-planner` → writes `task-1.md` … `task-N.md`. Tasks describe production-code changes only; they do not include test files. Update the task table in STATUS.
-4. Delegate to `plan-verifier` (independent) → writes `03-plan-verification.md`. If verdict = fail, loop back to step 3 (or to `test-planner` / `docs-writer` if the gap is upstream). Do not proceed on a fail verdict.
+### Phase 3 — Tests-first (red)
 
-### Phase 3 — Implementation
+1. Delegate to `test-writer`. It plans the TC set in working memory, writes failing behavioral tests directly as code, adds the smallest production stubs needed for the suite to compile, runs the suite to confirm **red** (failing assertions, not collection errors), and commits as one `test:` commit.
+2. STATUS: tests-written → committed (with SHA). Record TC-# count.
 
-Implementation only. No tests are written or run in this phase.
+If `test-writer` reports the spec is missing requirements it cannot test, stop and route back to `docs-writer`. If it reports the planned API surface in `task-N.md` won't compile against the tests, stop and route back to `impl-planner` to amend tasks before implementation begins.
+
+### Phase 4 — Implementation (green)
 
 For each task in order:
 
 1. Delegate to `implementer` with the path to `task-N.md`. It writes production code per the task's API surface and pseudocode, commits using the task's commit message verbatim, and returns the SHA. STATUS: task-N → committed (with SHA).
 2. Move to task-N+1.
 
+The test suite is **not** run per task. Per-task test runs are deliberately not part of this workflow.
+
 If any subagent reports a problem that requires plan changes, stop the loop and re-delegate to `impl-planner` for amendments.
 
-### Phase 4 — Verify
+### Phase 5 — Verify
 
-Tests are written and run once, after every implementation task is committed.
+1. Delegate to `verifier` → runs the full suite, writes `verification.md`, returns verdict.
+2. On **fail**: route the gaps based on type — missing-implementation gaps go to `impl-planner` for amendment tasks (`task-N+1.md` …, continuing the existing numbering — never renumber); missing-TC gaps go to `test-writer` for an additive test commit. Loop back to Phase 4 (and Phase 3 if new tests were added). After amendments are committed, re-run `verifier` (`## Attempt N` appended to `verification.md`). Repeat until pass.
+3. Update STATUS verification-loops table each attempt.
 
-1. Delegate to `test-writer` with the path to `01-test-plan.md`. It writes test files for every TC in the plan in a single pass. STATUS: tests-written.
-2. Delegate to `verifier` → runs the full suite, writes `verification.md`, returns verdict.
-3. On **fail**: delegate to `impl-planner` for amendment tasks (`task-N+1.md` …, continuing the existing numbering — never renumber). Loop back to Phase 3 for the new tasks. After amendments are committed, re-run `test-writer` only if new TCs were added to `01-test-plan.md`, then re-run `verifier` (`## Attempt N` appended to `verification.md`). Repeat until pass.
-4. Update STATUS verification-loops table each attempt.
+### Phase 6 — Code-quality review
 
-### Phase 5 — Code review
-
-1. Delegate to `code-reviewer` → reads full `git diff <base>..HEAD` for the feature, writes `review.md`.
+1. Delegate to `code-reviewer` → reads full `git diff <base>..HEAD` for the feature, writes `review.md`. Scope is **code quality** only (readability, naming, simplicity, structure) — verifier already proved correctness.
 2. Surface findings (especially blockers/majors) to the human.
-3. If blockers exist: delegate to `impl-planner` for fix tasks → back to Phase 3. Then re-review.
+3. If blockers exist: delegate to `impl-planner` for fix tasks → back to Phase 4 (and verifier in Phase 5). Then re-review.
 
-### Phase 6 — Human verification
+### Phase 7 — Human verification
 
 **CHECKPOINT 3**: human accepts the change. Update STATUS phase → done.
 
@@ -79,5 +78,6 @@ After every subagent return, update STATUS.md with:
 - `Last updated` timestamp
 - Phase / current task
 - Task table state changes
+- Test suite (red → green) row updates
 - Checkpoint completions
 - Verification attempt rows

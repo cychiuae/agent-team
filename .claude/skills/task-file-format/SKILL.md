@@ -1,11 +1,11 @@
 ---
 name: task-file-format
-description: Canonical task-N.md template and rules for sizing, dependencies, API surface, pseudocode, and Conventional Commits messages. Use in impl-planner (writing) and in implementer (reading). Tasks describe production code only — tests are authored separately in Phase 4 from 01-test-plan.md.
+description: Canonical task-N.md template and rules for sizing, dependencies, API surface, pseudocode, and Conventional Commits messages. Use in impl-planner (writing) and in implementer (reading). Tasks describe production code only — failing tests are authored separately by test-writer before implementation begins.
 ---
 
 # task-N.md format
 
-Each `task-N.md` describes exactly **one** git-commit-sized unit of **production-code** work. Tests are not part of any task; they are written once, in Phase 4, against `01-test-plan.md`.
+Each `task-N.md` describes exactly **one** git-commit-sized unit of **production-code** work. Tests are not part of any task. Failing behavioral tests for the whole feature are written once, by `test-writer`, **before** any implementation task lands. The verifier runs the suite once, after every task is committed.
 
 ## Template
 
@@ -20,7 +20,8 @@ One paragraph: what & why. This task is a single git commit of production code.
 
 ## Test cases addressed
 - TC-<i>[, TC-<j>]
-(Traceability only — these TCs will be exercised by tests written in Phase 4. This task does not write or run tests.)
+(Traceability only — these TCs already exist as failing tests written by test-writer.
+This task does not write or run tests.)
 
 ## Files
 - path/to/source.ext  (new | modify | delete)
@@ -63,7 +64,7 @@ The diff already shows the WHAT.>
 
 - **One concern per task.** If you describe it with "and", split it.
 - **< ~300 lines diff** is a healthy ceiling. Larger only with explicit justification under `## Risks / notes`.
-- **Independently committable**: the commit must build / type-check / lint cleanly on its own. The test suite is not run per task — tests are written and run once in Phase 4 — so "suite green" is not a per-task gate.
+- **Independently committable**: the commit must build / type-check / lint cleanly on its own. The test suite is **not** run per task — the verifier runs it once after every task is committed — so "suite green" is not a per-task gate.
 - **Forward dependencies only**: `Depends on:` may reference earlier tasks; `Blocks:` may reference later tasks. No cycles.
 
 ## API surface rules
@@ -72,6 +73,7 @@ The diff already shows the WHAT.>
 - Specify types where the language has them.
 - For endpoints: method, path, request shape, response shape, status codes.
 - For data shapes: field names and types, not prose descriptions.
+- Match the API surface that `test-writer`'s tests expect — if a test imports `service.Apply(...)`, the task's surface must define it. Tests are the contract.
 
 ## Pseudocode rules
 

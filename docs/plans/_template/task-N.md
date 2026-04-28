@@ -8,7 +8,8 @@ One paragraph: what & why. This task is exactly one git commit.
 
 ## Test cases addressed
 - TC-<i>
-(Traceability only — TCs are exercised by tests written in Phase 4. This task does not write or run tests.)
+(Traceability only — TCs already exist as failing tests committed by test-writer.
+This task does not write or run tests.)
 
 ## Files
 - path/to/source.ext  (new | modify | delete)

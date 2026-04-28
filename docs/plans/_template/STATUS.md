@@ -4,7 +4,7 @@ Phase: explore
 Current task: -
 Last updated: <YYYY-MM-DD HH:MM>
 
-Phases: explore | docs | plan | implementation | verify | review | done
+Phases: explore | docs | plan | tests-red | implementation | verify | review | done
 
 ## Tasks
 | ID     | Title | State   | Committed (SHA) | Notes |
@@ -12,11 +12,11 @@ Phases: explore | docs | plan | implementation | verify | review | done
 
 State values: pending | in-progress | committed
 
-## Phase 4 test pass
-| Step           | State   | Notes |
-|----------------|---------|-------|
-| tests-written  | pending |       |
-| verifier       | pending |       |
+## Test suite (red → green)
+| Step          | State   | Commit (SHA) | Notes |
+|---------------|---------|--------------|-------|
+| tests-written | pending |              |       |
+| verifier      | pending |              |       |
 
 ## Verification loops
 | Attempt | Result | Gap report                  | Amendment tasks |
@@ -28,8 +28,7 @@ State values: pending | in-progress | committed
 
 ## Human checkpoints
 - [ ] Ambiguities resolved
-- [ ] docs/ confirmed
-- [ ] Test plan approved
+- [ ] docs/product-spec/ + change summary confirmed
 - [ ] Final review accepted
 
 ## Activity log
